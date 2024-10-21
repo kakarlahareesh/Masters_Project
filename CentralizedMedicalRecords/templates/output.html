@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Data Output</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .table td, .table th {
+            vertical-align: middle;
+        }
+        .table img {
+            max-width: 150px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Patient Details</h1>
+        
+        {% if error_message %}
+            <div class="alert alert-danger" role="alert">
+                {{ error_message }}
+            </div>
+        {% else %}
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Displaying Patient Details -->
+                    <tr><td>Resource Type</td><td>{{ patient_data.resourceType }}</td></tr>
+                    <tr><td>Identifier System</td><td>{{ patient_data.identifier[0].system if patient_data.identifier else 'N/A' }}</td></tr>
+                    <tr><td>Identifier Value</td><td>{{ patient_data.identifier[0].value if patient_data.identifier else 'N/A' }}</td></tr>
+                    <tr><td>Active</td><td>{{ patient_data.active }}</td></tr>
+                    <tr><td>Name</td><td>{{ patient_data.name[0].given[0] if patient_data.name else 'N/A' }} {{ patient_data.name[0].family if patient_data.name else 'N/A' }}</td></tr>
+                    <tr><td>Phone</td><td>{{ patient_data.telecom[0].value if patient_data.telecom else 'N/A' }}</td></tr>
+                    <tr><td>Email</td><td>{{ patient_data.telecom[1].value if patient_data.telecom and patient_data.telecom|length > 1 else 'N/A' }}</td></tr>
+                    <tr><td>Gender</td><td>{{ patient_data.gender }}</td></tr>
+                    <tr><td>Birth Date</td><td>{{ patient_data.birthDate }}</td></tr>
+                    <tr><td>Address</td><td>{{ patient_data.address[0].line[0] if patient_data.address else 'N/A' }}, {{ patient_data.address[0].city if patient_data.address else 'N/A' }}, {{ patient_data.address[0].state if patient_data.address else 'N/A' }}, {{ patient_data.address[0].postalCode if patient_data.address else 'N/A' }}, {{ patient_data.address[0].country if patient_data.address else 'N/A' }}</td></tr>
+                    <tr><td>Marital Status</td><td>{{ patient_data.maritalStatus.coding[0].display if patient_data.maritalStatus and patient_data.maritalStatus.coding else 'N/A' }}</td></tr>
+                    <tr><td>Contact Name</td><td>{{ patient_data.contact[0].name.given[0] if patient_data.contact else 'N/A' }} {{ patient_data.contact[0].name.family if patient_data.contact else 'N/A' }}</td></tr>
+                    <tr><td>Contact Phone</td><td>{{ patient_data.contact[0].telecom[0].value if patient_data.contact and patient_data.contact[0].telecom else 'N/A' }}</td></tr>
+                    <tr><td>Contact Address</td><td>{{ patient_data.contact[0].address.line[0] if patient_data.contact and patient_data.contact[0].address else 'N/A' }}, {{ patient_data.contact[0].address.city if patient_data.contact and patient_data.contact[0].address else 'N/A' }}, {{ patient_data.contact[0].address.state if patient_data.contact and patient_data.contact[0].address else 'N/A' }}, {{ patient_data.contact[0].address.postalCode if patient_data.contact and patient_data.contact[0].address else 'N/A' }}, {{ patient_data.contact[0].address.country if patient_data.contact and patient_data.contact[0].address else 'N/A' }}</td></tr>
+                    <tr><td>Contact Organization</td><td>{{ patient_data.contact[0].organization.display if patient_data.contact and patient_data.contact[0].organization else 'N/A' }}</td></tr>
+                    <tr><td>Preferred Language</td><td>{{ patient_data.communication[0].language.coding[0].display if patient_data.communication and patient_data.communication[0].language.coding else 'N/A' }}</td></tr>
+                    <tr><td>General Practitioner</td><td>{{ patient_data.generalPractitioner[0].display if patient_data.generalPractitioner else 'N/A' }}</td></tr>
+                    <tr><td>Managing Organization</td><td>{{ patient_data.managingOrganization.display if patient_data.managingOrganization else 'N/A' }}</td></tr>
+                    <tr><td>Link</td><td>{{ patient_data.link[0].other.display if patient_data.link else 'N/A' }}</td></tr>
+                </tbody>
+            </table>
+        {% endif %}
+        
+        <div class="mt-4">
+            <p><strong>API Details:</strong> {{ api_details }}</p>
+            <p><strong>Total Time Taken:</strong> {{ total_time }} milliseconds</p>
+        </div>
+        
+        <a href="{{ url_for('index') }}" class="btn btn-primary">Back to Home</a>
+    </div>
+</body>
+</html>
